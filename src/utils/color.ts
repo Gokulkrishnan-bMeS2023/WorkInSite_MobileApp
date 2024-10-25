@@ -18,12 +18,14 @@ export const Colors = {
 
   //theme color
   primaryColor: 'rgb(250, 212, 39)', // Yellow
+  // primaryColor: '#31b0c5', // Yellow
   primaryBgTextColor: 'black', // Black text
   secondaryColor: 'rgb(79, 67, 15)', // Dark brown
   secondaryBgTextColor: 'white', // White text
 
   // Semantic Colors
   successColor: 'rgb(25, 134, 83)', // Green
+  // successColor: '#4b4a49', // Green
   successBgTextColor: 'white', // White text on success
   warningColor: 'rgb(255, 193, 7)', // Yellow
   warningBgTextColor: 'white', // White text on warning

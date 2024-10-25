@@ -1,4 +1,5 @@
 const image = {
-  logo: require('./logo.png'),
+  logo: require('./work-insite-logo.png'),
+  sign_in: require('./siginin-illustration.png'),
 };
 export default image;

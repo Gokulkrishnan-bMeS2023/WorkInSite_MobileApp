@@ -108,17 +108,67 @@
 //   },
 // });
 
-import {View, Text, SafeAreaView, StatusBar, ScrollView} from 'react-native';
-import React from 'react';
-import LoginScreen from './src/screens/Authantication/LoginScreen';
+// import {
+//   View,
+//   Text,
+//   SafeAreaView,
+//   StatusBar,
+//   ScrollView,
+//   KeyboardAvoidingView,
+// } from 'react-native';
+// import React from 'react';
+// import LoginScreen from './src/screens/Authantication/LoginScreen';
+
+// export default function App() {
+//   return (
+//     // <SafeAreaView>
+//     //   <StatusBar />
+//     <ScrollView
+//       keyboardShouldPersistTaps="handled"
+//       contentContainerStyle={{width: '100%', height: 'auto'}}>
+//       <KeyboardAvoidingView enabled>
+//         <LoginScreen />
+//       </KeyboardAvoidingView>
+//     </ScrollView>
+//     // </SafeAreaView>
+//   );
+// }
+
+// 2
+// import React from 'react';
+// import {NavigationContainer} from '@react-navigation/native';
+// import AuthNavigator from './src/navigation/AuthNavigator';
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <AuthNavigator />
+//     </NavigationContainer>
+//   );
+// }
+
+//3
+
+import React, {useState, useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import AuthNavigator from './src/navigation/AuthNavigator';
+import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Set a timer for the splash screen duration
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Hide splash screen after 1.5 seconds
+    }, 1500);
+
+    return () => clearTimeout(timer); // Clear timer on component unmount
+  }, []);
+
   return (
-    <SafeAreaView>
-      <StatusBar />
-      <ScrollView>
-        <LoginScreen />
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      {isLoading ? <SplashScreen  /> : <AuthNavigator />}
+    </NavigationContainer>
   );
 }
