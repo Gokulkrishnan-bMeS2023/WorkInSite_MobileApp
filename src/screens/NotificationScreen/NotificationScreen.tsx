@@ -3,11 +3,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   BackHandler,
   StyleSheet,
 } from 'react-native';
-// import { RouteName } from '../../routes';
 import {useFocusEffect} from '@react-navigation/native';
 import {Colors} from '../../utils';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

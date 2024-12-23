@@ -1,16 +1,14 @@
 import React from 'react';
 import {
   View,
-  Text,
-  TouchableOpacity,
   BackHandler,
   StyleSheet,
 } from 'react-native';
-// import { RouteName } from '../../routes';
 import {useFocusEffect} from '@react-navigation/native';
-import {Colors} from '../../utils';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from '../../components/CommonComponets/Header/Header';
+
 export default function SettingsScreen({navigation}: any) {
+
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -23,30 +21,18 @@ export default function SettingsScreen({navigation}: any) {
       };
     }, []),
   );
+  const handleback = () => {
+    navigation.navigate('Home');
+  };
   return (
-    <View>
-      <View style={styles.Container}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Icon
-            name="arrow-left-circle"
-            size={25}
-            color={Colors.secondaryBgTextColor}
-          />
-        </TouchableOpacity>
-        <Text style={{color: '#fff'}}>Settings</Text>
-      </View>
+    <View style={styles.container}>
+      <Header title="settings" onBackPress={handleback} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  Container: {
-    backgroundColor: Colors.primaryColor,
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-    height: 50,
-    paddingHorizontal: 10,
+  container: {
+    flex: 1,
   },
 });

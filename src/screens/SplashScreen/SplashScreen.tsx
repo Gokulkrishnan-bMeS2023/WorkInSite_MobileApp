@@ -1,20 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StatusBar, StyleSheet} from 'react-native';
 import {Colors} from '../../utils';
 import images from '../../images/index';
 import * as Animatable from 'react-native-animatable';
-import {RouteName} from '../../routers';
+import RouteName from '../../navigation/RouteName';
+import {AuthHelper} from '../../helpers/AuthHelper';
 
-type SplashScreenProps = {
-  navigation?: any; // Make navigation optional
-};
-
-const SplashScreen: React.FC<SplashScreenProps> = ({navigation}: any) => {
+const SplashScreen = ({navigation}: any) => {
   StatusBar.setBackgroundColor(Colors.primaryColor);
 
-  // setTimeout(async () => {
-  //   navigation.navigate(RouteName.Home_SCREEN);
-  // }, 1500);
+  useEffect(() => {
+    const checkUserProfile = async () => {
+      const profile = await AuthHelper.getUserProfile();
+      if (profile) {
+        navigation.navigate(RouteName.Home_SCREEN);
+      } else {
+        navigation.navigate(RouteName.LOGIN_SCREEN);
+      }
+    };
+
+    setTimeout(checkUserProfile, 1500);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -34,18 +40,18 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryColor, // Background color for the splash screen
+    backgroundColor: Colors.primaryColor,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logoContainer: {
-    width: 200, // Container size for the logo
-    height: 200,
+    width: 150,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    width: '100%', // Responsive sizing for the logo image
+    width: '100%',
     height: '100%',
   },
 });

@@ -1,21 +1,6 @@
 export const Colors = {
-  white_backgound: '#ffffff',
-  theme_backgound: '#31b0c5',
-  primary_color: '#31b0c5',
-  secondary_color: '#4b4a49',
-  black_text_color: '#000',
-  white_text_color: '#fff',
-  red_text_color: 'red',
-  gray_text_color: 'gray',
-  lotion_color: '#fbfbfb',
-  light_shadow: '#e5e7e9',
-
-  //
-  borderColor: '#ccc', // Default border color
-  focusBorderColor: 'yellow', // Blue border when focused
-  inputBackgroundColor: '#fff', // Default background color
-  focusBackgroundColor: '#fff', // Light blue background when focused
-
+  white: 'white',
+  black: 'black',
   //theme color
   primaryColor: 'rgb(250, 212, 39)', // Yellow
   // primaryColor: '#31b0c5', // Yellow
@@ -32,5 +17,10 @@ export const Colors = {
   dangerColor: 'rgb(220, 56, 72)', // Red
   dangerBgTextColor: 'white', // White text on danger
   grayColor: 'rgb(130, 126, 125)', // Gray
+
+  selecthoverbgcolor: 'rgba(250, 212, 39, 0.1)',
+
+  //
+  backgroundColor: '#FFF8DC',
 };
 export default Colors;

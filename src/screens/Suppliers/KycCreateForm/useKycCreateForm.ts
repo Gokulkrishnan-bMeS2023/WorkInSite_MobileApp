@@ -1,0 +1,55 @@
+import {useCallback, useState} from 'react';
+import {SupplierDetailsType} from '../DTOs/SupplierDetails';
+import {KYCTypes} from '../../clients/DTOs/ClientProps';
+import {useKycValidate} from '../../Clients/KycValidate/KycValidate';
+
+const useKycCreateForm = (props: SupplierDetailsType) => {
+  const {supplierDetails, setSupplierDetails} = props;
+
+  const [kycType, setKycType] = useState<KYCTypes | ''>('');
+  const [input, setInput] = useState('');
+  let {error, setError, initialError, validate, kycItems} = useKycValidate(
+    input,
+    kycType as KYCTypes,
+  );
+
+  const getInputCount = (type: KYCTypes) =>
+    supplierDetails.kycDetails.filter(
+      item => item.value && item.kycType === type,
+    ).length;
+  kycItems = kycItems.filter(item => getInputCount(item.value) === 0);
+
+  const handleSelectChange = useCallback(
+    (value: KYCTypes) => {
+      setKycType(value);
+      setError(initialError);
+      setInput('');
+    },
+    [setKycType, setError, setInput, initialError],
+  );
+
+  const handleAdd = () => {
+    if (validate()) {
+      setSupplierDetails(prev => ({
+        ...prev,
+        kycDetails: [
+          ...prev.kycDetails,
+          {kycType: kycType as KYCTypes, value: input},
+        ],
+      }));
+      props.Ref?.current.close();
+    }
+  };
+
+  return {
+    kycType,
+    kycItems,
+    input,
+    setInput,
+    error,
+    handleSelectChange,
+    handleAdd,
+  };
+};
+
+export {useKycCreateForm};

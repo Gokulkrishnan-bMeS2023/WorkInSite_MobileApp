@@ -1,247 +1,194 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
-  View,
+  StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
+  View,
+  Share,
+  ToastAndroid,
   ScrollView,
   Alert,
-  StyleSheet,
-  Switch,
 } from 'react-native';
-import {AuthHelper} from '../../helpers/AuthHelper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Colors, SF, SH, widthPercent} from '../../utils';
 import CustomAvatar from './CustomAvatar';
+import RouteName from '../../navigation/RouteName';
+import {AuthHelper} from '../../helpers/AuthHelper';
+import {useUserProfile} from './useUserProfile';
 
-const Colors = {
-  primaryColor: 'rgb(250, 212, 39)', // Yellow
-  primaryBgTextColor: 'black', // Black text
-  secondaryColor: 'rgb(79, 67, 15)', // Dark brown
-  secondaryBgTextColor: 'white', // White text
-  successColor: 'rgb(25, 134, 83)', // Green
-  successBgTextColor: 'white', // White text on success
-  warningColor: 'rgb(255, 193, 7)', // Yellow
-  warningBgTextColor: 'white', // White text on warning
-  dangerColor: 'rgb(220, 56, 72)', // Red
-  dangerBgTextColor: 'white', // White text on danger
-  grayColor: 'rgb(130, 126, 125)', // Gray
-};
+interface ProfileScreenProps {
+  navigation: {
+    navigate: (routeName: string) => void;
+  };
+}
 
-export default function ProfilePage({navigation}: any) {
-  const [profile, setProfile] = useState<any>({
-    id: '',
-    name: '',
-    phone: '',
-    language: '',
-    role: {id: '', name: ''},
-    isActive: false,
-    notes: '',
-    imageUri: '',
-  });
+interface OptionProps {
+  iconName: string;
+  label: string;
+  onPress: () => void;
+}
 
-  const [loading, setLoading] = useState(true);
+const ProfileScreen: React.FC<ProfileScreenProps> = ({navigation}) => {
+  const {name} = useUserProfile();
 
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        const userProfile = await AuthHelper.getUserProfile();
-        if (userProfile) {
-          setProfile(userProfile);
-        }
-      } catch (error) {
-        console.log('Error fetching profile', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadProfile();
-  }, []);
-
-  const handleSave = async () => {
+  const handleShare = async () => {
     try {
-      // await AuthHelper.setUserProfile(profile);
-      Alert.alert('Success', 'Profile saved successfully');
-    } catch (error) {
-      Alert.alert('Error', 'Failed to save profile');
+      const result = await Share.share({message: 'WorkInSite'});
+      if (result.action === Share.dismissedAction) return;
+    } catch (error: any) {
+      ToastAndroid.showWithGravity(
+        error.message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
     }
   };
 
   const handleLogout = async () => {
-    try {
-      await AuthHelper.logout();
-    } catch (error) {
-      console.error('Error during logout', error);
-    }
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Confirm',
+          onPress: async () => {
+            try {
+              await AuthHelper.logout();
+              navigation.navigate('Home');
+              navigation.navigate(RouteName.LOGIN_SCREEN);
+            } catch {
+              ToastAndroid.showWithGravity(
+                'Logout failed',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+              );
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );
   };
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
+  const renderOption = ({iconName, label, onPress}: OptionProps) => (
+    <TouchableOpacity style={styles.optionContainer} onPress={onPress}>
+      <Icon
+        name={iconName}
+        size={24}
+        color={Colors.secondaryColor}
+        style={styles.icon}
+      />
+      <Text style={styles.menuText}>{label}</Text>
+      <Icon
+        name="arrow-forward"
+        size={24}
+        color={Colors.grayColor}
+        style={styles.arrowIcon}
+      />
+    </TouchableOpacity>
+  );
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <View>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Icon
-              name="arrow-left-circle"
-              size={25}
-              color={Colors.secondaryBgTextColor}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Profile</Text>
-        </View>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.imageContainer}>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.profileSection}>
           <CustomAvatar
-            name={profile.name}
-            imageUri={null}
-            size={60}
+            name={name ?? ''}
             backgroundColor={Colors.primaryColor}
             textColor={Colors.secondaryColor}
+            borderRadius={true}
           />
+          <Text style={styles.profileText}>{name}</Text>
         </View>
-
-        <Text style={styles.label}>Name:</Text>
-        <TextInput
-          value={profile.name}
-          onChangeText={text => setProfile({...profile, name: text})}
-          style={styles.input}
-          placeholder="Enter your name"
-        />
-
-        <Text style={styles.label}>Phone Number:</Text>
-        <TextInput
-          value={profile.phone}
-          onChangeText={text => setProfile({...profile, phone: text})}
-          style={styles.input}
-          placeholder="Enter your phone number"
-          keyboardType="phone-pad"
-        />
-
-        <Text style={styles.label}>Role: {profile?.role?.name}</Text>
-
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Is Active:</Text>
-          <Switch
-            value={profile.isActive}
-            onValueChange={value => setProfile({...profile, isActive: value})}
-          />
-        </View>
-
-        <Text style={styles.label}>Notes:</Text>
-        <TextInput
-          value={profile.notes}
-          onChangeText={text => setProfile({...profile, notes: text})}
-          style={styles.textarea}
-          placeholder="Enter any notes"
-          multiline={true}
-          numberOfLines={4} // You can adjust this to change the initial height
-          textAlignVertical="top" // Align text to the top
-        />
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => setProfile(profile)}
-            style={[styles.button, styles.cancelButton]}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleSave}
-            style={[styles.button, styles.saveButton]}>
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-          onPress={handleLogout}
-          style={[styles.button, styles.logoutButton]}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
       </View>
-    </ScrollView>
+
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.options}>
+          {renderOption({
+            iconName: 'edit',
+            label: 'Edit Personal Details',
+            onPress: () => navigation.navigate(RouteName.EDITPROFILE_SCREEN),
+          })}
+          {renderOption({
+            iconName: 'lock',
+            label: 'Change PIN',
+            onPress: () => navigation.navigate(RouteName.CHANGE_PIN_SCREEN),
+          })}
+          {renderOption({
+            iconName: 'share',
+            label: 'Refer A Friend',
+            onPress: handleShare,
+          })}
+          {renderOption({
+            iconName: 'logout',
+            label: 'Logout',
+            onPress: handleLogout,
+          })}
+        </View>
+      </ScrollView>
+    </View>
   );
-}
+};
+
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    // backgroundColor: Colors.secondaryColor,
+  container: {
+    flex: 1,
   },
-  headerContainer: {
+  header: {
+    width: widthPercent(100),
+    height: widthPercent(20),
     backgroundColor: Colors.primaryColor,
     flexDirection: 'row',
+  },
+  profileSection: {
+    alignSelf: 'center',
+    elevation: 20,
+    width: widthPercent(82),
+    height: widthPercent(50),
+    backgroundColor: Colors.white,
+    borderRadius: 12,
+    margin: SH(20),
+    marginTop: SH(200),
     alignItems: 'center',
-    padding: 15,
+    justifyContent: 'center',
   },
-  headerText: {
-    color: Colors.secondaryBgTextColor,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  contentContainer: {
-    padding: 20,
-  },
-  imageContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  label: {
-    color: '#000',
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: Colors.grayColor,
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: Colors.secondaryBgTextColor,
-    color: Colors.primaryBgTextColor,
-    marginBottom: 15,
-  },
-  textarea: {
-    borderWidth: 1,
-    borderColor: Colors.grayColor,
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: Colors.secondaryBgTextColor,
-    color: Colors.primaryBgTextColor,
-    height: 100,
-    marginBottom: 15,
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: 10,
-    marginBottom: 20,
-  },
-  button: {
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: Colors.secondaryColor,
-    color: Colors.secondaryBgTextColor,
-  },
-  saveButton: {
-    backgroundColor: Colors.primaryColor,
+  profileText: {
     color: Colors.secondaryColor,
+    fontSize: SF(16),
+    paddingTop: SH(10),
   },
-  logoutButton: {
-    backgroundColor: Colors.dangerColor,
-    marginTop: 10,
+  scrollView: {
+    width: '100%',
+    height: 'auto',
   },
-  buttonText: {
-    color: Colors.secondaryBgTextColor,
-    fontWeight: 'bold',
+  options: {
+    marginTop: SH(160),
+    marginBottom: SH(100),
+  },
+  optionContainer: {
+    height: SH(60),
+    borderBottomWidth: 0.3,
+    borderColor: Colors.grayColor,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 10,
+  },
+  menuText: {
+    color: '#000',
+    fontSize: SF(16),
+    flex: 1,
+  },
+  icon: {
+    marginHorizontal: 10,
+  },
+  arrowIcon: {
+    position: 'absolute',
+    right: 30,
   },
 });

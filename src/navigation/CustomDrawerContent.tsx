@@ -1,92 +1,4 @@
-// import React from 'react';
-// import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-// import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-// import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Using icons if needed
-
-// const CustomDrawerContent = (props: any) => {
-//   const {navigation} = props;
-
-//   return (
-//     <DrawerContentScrollView {...props}>
-//       {/* Custom Header */}
-//       <View style={styles.drawerHeader}>
-//         <Text style={styles.drawerHeaderText}>WorkInSite</Text>
-//       </View>
-
-//       {/* Custom Drawer Items */}
-//       {/* <DrawerItem
-//         label="Home"
-//         onPress={() => navigation.navigate('HomeTabs')}
-//         icon={() => <Icon name="home" size={24} />}
-//       /> */}
-//       <DrawerItem
-//         label="Users"
-//         onPress={() => navigation.navigate('Users')}
-//         icon={() => <Icon name="account" size={24} />}
-//       />
-//       <DrawerItem
-//         label="Contacts"
-//         onPress={() => navigation.navigate('Contacts')}
-//         icon={() => <Icon name="contacts" size={24} />}
-//       />
-//       <DrawerItem
-//         label="Clients"
-//         onPress={() => navigation.navigate('Clients')}
-//         icon={() => <Icon name="briefcase" size={24} />}
-//       />
-//       <DrawerItem
-//         label="Sites"
-//         onPress={() => navigation.navigate('Sites')}
-//         icon={() => <Icon name="map-marker" size={24} />}
-//       />
-//       <DrawerItem
-//         label="Workers"
-//         onPress={() => navigation.navigate('Workers')}
-//         icon={() => <Icon name="account-hard-hat" size={24} />}
-//       />
-//       <DrawerItem
-//         label="Suppliers"
-//         onPress={() => navigation.navigate('Suppliers')}
-//         icon={() => <Icon name="truck" size={24} />}
-//       />
-
-//       {/* Custom Logout Button */}
-//       {/* <View style={styles.footer}>
-//         <TouchableOpacity
-//           onPress={() => {
-//             // Custom logout logic or navigation to login screen
-//             navigation.navigate('Login');
-//           }}>
-//           <Text style={styles.logoutText}>Logout</Text>
-//         </TouchableOpacity>
-//       </View> */}
-//     </DrawerContentScrollView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   drawerHeader: {
-//     padding: 20,
-//     backgroundColor: '#f4f4f4',
-//   },
-//   drawerHeaderText: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//   },
-//   footer: {
-//     marginTop: 20,
-//     paddingHorizontal: 20,
-//   },
-//   logoutText: {
-//     fontSize: 16,
-//     color: 'red',
-//   },
-// });
-
-// export default CustomDrawerContent;
-
-//2
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {
   View,
@@ -99,28 +11,54 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import images from '..';
 import {Colors} from '../utils';
+import {AuthHelper} from '../helpers/AuthHelper';
+import RouteName from './RouteName';
 
 const CustomDrawerContent = (props: any) => {
   const {navigation} = props;
 
-  const drawerItems = [
-    {label: 'Users', icon: 'account', screen: 'Users'},
-    {label: 'Contacts', icon: 'contacts', screen: 'Contacts'},
-    {label: 'Clients', icon: 'briefcase', screen: 'Clients'},
-    {label: 'Sites', icon: 'map-marker', screen: 'Sites'},
-    {label: 'Workers', icon: 'account-hard-hat', screen: 'Workers'},
-    {label: 'Suppliers', icon: 'truck', screen: 'Suppliers'},
-  ];
+  const [drawerItems, setDrawerItems] = useState([
+    {label: 'Users', icon: 'account', screen: RouteName.USER_LIST_SCREEN},
+    {
+      label: 'Contacts',
+      icon: 'contacts',
+      screen: RouteName.CONTACT_LIST_SCREEN,
+    },
+    {label: 'Clients', icon: 'briefcase', screen: RouteName.CLIENT_LIST_SCREEN},
+    {label: 'Sites', icon: 'map-marker', screen: RouteName.SITE_LIST_SCREEN},
+    {
+      label: 'Workers',
+      icon: 'account-hard-hat',
+      screen: RouteName.WORKER_LIST_SCREEN,
+    },
+    {label: 'Suppliers', icon: 'truck', screen: RouteName.SUPPLIER_LIST_SCREEN},
+  ]);
+
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      const profile = await AuthHelper.getUserProfile();
+
+      setDrawerItems(currentItems => {
+        if (profile?.role?.name === 'Supervisor') {
+          return currentItems.filter(item => item.label !== 'Users');
+        }
+        return currentItems;
+      });
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   return (
     <DrawerContentScrollView {...props}>
-      {/* Custom Header */}
       <View style={styles.drawerHeader}>
         <Image source={images.logo} style={styles.logo} />
         <Text style={styles.drawerHeaderText}>WorkInSite</Text>
       </View>
-
-      {/* Custom Drawer Items */}
       {drawerItems.map((item, index) => {
         const scaleAnim = new Animated.Value(1);
 
@@ -165,10 +103,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f4f4f4',
   },
   logo: {
-    width: 40, // Adjust as needed
-    height: 40, // Adjust as needed
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
-    marginRight: 10, // Space between logo and text
+    marginRight: 10,
   },
   drawerHeaderText: {
     fontSize: 20,
@@ -186,11 +124,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 20,
-    color: Colors.secondaryColor, // Default icon color
+    color: Colors.secondaryColor,
   },
   drawerLabel: {
     fontSize: 16,
-    color: Colors.secondaryColor, // Default text color
+    color: Colors.secondaryColor,
   },
 });
 

@@ -1,138 +1,4 @@
-// import React, {useState, useRef} from 'react';
-// import {
-//   View,
-//   TextInput,
-//   StyleSheet,
-//   NativeSyntheticEvent,
-//   TextInputKeyPressEventData,
-// } from 'react-native';
-// import {SF, SH, SW} from '../../../utils'; // Scaling utilities
-// import {Colors, Fonts} from '../../../utils'; // Colors and Fonts modules
-
-// interface PinInputProps {
-//   pinLength?: number;
-//   secureTextEntry?: boolean;
-//   onPinChange?: (pin: string) => void;
-// }
-
-// const PinInput: React.FC<PinInputProps> = ({
-//   pinLength = 4, // Default pin length is 4 if not provided
-//   secureTextEntry = false,
-//   onPinChange,
-// }) => {
-//   const [pin, setPin] = useState<string[]>(Array(pinLength).fill(''));
-//   const [focusedIndex, setFocusedIndex] = useState<number | null>(null); // Track focused index
-//   const inputRefs = useRef<Array<TextInput | null>>(
-//     Array(pinLength).fill(null),
-//   );
-
-//   // Handle text change
-//   const handleTextChange = (text: string, index: number) => {
-//     const newPin = [...pin];
-//     newPin[index] = text;
-//     setPin(newPin);
-
-//     // Notify parent component
-//     if (onPinChange) {
-//       onPinChange(newPin.join(''));
-//     }
-
-//     // Automatically focus the next input if not the last one
-//     if (text && index < pinLength - 1) {
-//       inputRefs.current[index + 1]?.focus();
-//     }
-//   };
-
-//   // Handle backspace
-//   const handleBackspace = (
-//     index: number,
-//     event: NativeSyntheticEvent<TextInputKeyPressEventData>,
-//   ) => {
-//     if (event.nativeEvent.key === 'Backspace' && index > 0 && !pin[index]) {
-//       inputRefs.current[index - 1]?.focus(); // Focus previous input
-//       handleTextChange('', index - 1); // Clear previous input
-//     }
-//   };
-
-//   // Handle key press
-//   const handleKeyPress = (
-//     event: NativeSyntheticEvent<TextInputKeyPressEventData>,
-//     index: number,
-//   ) => {
-//     if (event.nativeEvent.key === 'Backspace' && pin[index] === '') {
-//       handleBackspace(index, event);
-//     }
-//   };
-
-//   // Handle focus
-//   const handleFocus = (index: number) => {
-//     setFocusedIndex(index);
-//   };
-
-//   // Handle blur (unfocus)
-//   const handleBlur = () => {
-//     setFocusedIndex(null);
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {Array(pinLength)
-//         .fill(0)
-//         .map((_, index) => (
-//           <TextInput
-//             key={index}
-//             ref={ref => (inputRefs.current[index] = ref)}
-//             style={[
-//               styles.pinInput,
-//               focusedIndex === index && styles.pinInputFocused, // Apply focus styles
-//             ]}
-//             maxLength={1}
-//             value={pin[index]}
-//             onChangeText={text => handleTextChange(text, index)}
-//             secureTextEntry={secureTextEntry}
-//             placeholder="*"
-//             // autoFocus={index === 0} // Autofocus the first input
-//             keyboardType="number-pad"
-//             textContentType="oneTimeCode"
-//             onKeyPress={event => handleKeyPress(event, index)}
-//             onFocus={() => handleFocus(index)} // Set focus index
-//             onBlur={handleBlur} // Reset focus index on blur
-//           />
-//         ))}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//   },
-//   pinInput: {
-//     width: SW(50),
-//     height: SH(50),
-//     fontSize: SF(20),
-//     textAlign: 'center',
-//     borderWidth: 1,
-//     borderColor: Colors.borderColor,
-//     color: Colors.black_text_color,
-//     fontFamily: Fonts.Inter,
-//     backgroundColor: Colors.inputBackgroundColor,
-//     // marginHorizontal: SW(5),
-//     // borderRadius: SH(50),
-//     borderRadius: SH(5),
-//   },
-//   pinInputFocused: {
-//     borderColor: Colors.focusBorderColor, // Change border color on focus
-//     backgroundColor: Colors.focusBackgroundColor, // Optional: change background color
-//   },
-// });
-
-// export default PinInput;
-
-//2
-
-import React, {useState, useRef} from 'react';
+import React, {useRef, FC, useState} from 'react';
 import {
   View,
   TextInput,
@@ -140,92 +6,81 @@ import {
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
 } from 'react-native';
-import {SF, SH, SW} from '../../../utils'; // Scaling utilities
-import {Colors, Fonts} from '../../../utils'; // Colors and Fonts modules
+import {SF, SH, SW} from '../../../utils';
+import {Colors, Fonts} from '../../../utils';
+
 interface PinInputProps {
+  value: string;
   pinLength?: number;
   secureTextEntry?: boolean;
-  onPinChange?: (pin: string) => void;
+  onPinChange: (pin: string) => void;
 }
-const PinInput: React.FC<PinInputProps> = ({
-  pinLength = 4, // Default pin length is 4 if not provided
+
+const PinInput: FC<PinInputProps> = ({
+  value,
+  pinLength = 4,
   secureTextEntry = false,
   onPinChange,
 }) => {
-  const [pin, setPin] = useState<string[]>(Array(pinLength).fill(''));
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null); // Track focused index
+
   const inputRefs = useRef<Array<TextInput | null>>(
     Array(pinLength).fill(null),
   );
-  // Handle text change
+
   const handleTextChange = (text: string, index: number) => {
-    const newPin = [...pin];
+    const newPin = value.split('');
     newPin[index] = text;
-    setPin(newPin);
-    // Notify parent component
-    if (onPinChange) {
-      onPinChange(newPin.join(''));
-    }
-    // Automatically focus the next input if not the last one
+    onPinChange(newPin.join(''));
+
     if (text && index < pinLength - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
-  // Handle backspace
+
   const handleBackspace = (
     index: number,
     event: NativeSyntheticEvent<TextInputKeyPressEventData>,
   ) => {
-    if (event.nativeEvent.key === 'Backspace' && index > 0 && !pin[index]) {
-      inputRefs.current[index - 1]?.focus(); // Focus previous input
-      handleTextChange('', index - 1); // Clear previous input
+    if (event.nativeEvent.key === 'Backspace' && index > 0 && !value[index]) {
+      inputRefs.current[index - 1]?.focus();
+      handleTextChange('', index - 1);
     }
   };
-  // Handle key press
-  const handleKeyPress = (
-    event: NativeSyntheticEvent<TextInputKeyPressEventData>,
-    index: number,
-  ) => {
-    if (event.nativeEvent.key === 'Backspace' && pin[index] === '') {
-      handleBackspace(index, event);
-    }
-  };
-  // Handle focus
+
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
   };
-  // Handle blur (unfocus)
   const handleBlur = () => {
     setFocusedIndex(null);
   };
+
   return (
     <View style={styles.container}>
-      {Array(pinLength)
-        .fill(0)
-        .map((_, index) => (
-          <TextInput
-            key={index}
-            ref={ref => (inputRefs.current[index] = ref)}
-            style={[
-              styles.pinInput,
-              focusedIndex === index && styles.pinInputFocused, // Apply focus styles
-            ]}
-            maxLength={1}
-            value={pin[index]}
-            onChangeText={text => handleTextChange(text, index)}
-            secureTextEntry={secureTextEntry}
-            placeholder="*"
-            // autoFocus={index === 0} // Autofocus the first input
-            keyboardType="number-pad"
-            textContentType="oneTimeCode"
-            onKeyPress={event => handleKeyPress(event, index)}
-            onFocus={() => handleFocus(index)} // Set focus index
-            onBlur={handleBlur} // Reset focus index on blur
-          />
-        ))}
+      {Array.from({length: pinLength}).map((_, index) => (
+        <TextInput
+          key={index}
+          ref={ref => (inputRefs.current[index] = ref)}
+          style={[
+            styles.pinInput,
+            focusedIndex === index && styles.pinInputFocused,
+          ]}
+          maxLength={1}
+          value={value[index] || ''}
+          onChangeText={text => handleTextChange(text, index)}
+          secureTextEntry={secureTextEntry}
+          placeholder="*"
+          keyboardType="number-pad"
+          textContentType="oneTimeCode"
+          onKeyPress={event => handleBackspace(index, event)}
+          onFocus={() => handleFocus(index)}
+          onBlur={handleBlur}
+        />
+      ))}
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -236,16 +91,18 @@ const styles = StyleSheet.create({
     height: SH(50),
     fontSize: SF(16),
     textAlign: 'center',
+    textAlignVertical: 'center', // Ensures cursor stays centered vertically
+    paddingTop: SH(12), // Adjust to center the text vertically in the input
+    paddingBottom: SH(12), // Adjust to balance the padding
     borderWidth: 1,
-    borderColor: Colors.borderColor,
-    color: Colors.black_text_color,
+    borderColor: Colors.grayColor,
+    color: Colors.black,
     fontFamily: Fonts.Inter,
-    backgroundColor: Colors.inputBackgroundColor,
     borderRadius: SH(10),
   },
   pinInputFocused: {
-    borderColor: Colors.focusBorderColor, // Change border color on focus
-    backgroundColor: Colors.focusBackgroundColor, // Optional: change background color
+    borderColor: Colors.primaryColor,
   },
 });
+
 export default PinInput;

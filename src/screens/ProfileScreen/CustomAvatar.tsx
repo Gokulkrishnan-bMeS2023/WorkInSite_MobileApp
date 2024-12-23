@@ -1,34 +1,60 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import {View, Text, Image, StyleSheet} from 'react-native';
 
 interface CustomAvatarProps {
   name: string;
-  imageUri?: string | null; // Optional image URI
-  size?: number;             // Default size will be 50 if not provided
-  backgroundColor?: string;  // Background color for the fallback initials
-  textColor?: string;        // Color for the initials text
+  imageUri?: string | null;
+  size?: number;
+  backgroundColor?: string;
+  textColor?: string;
+  borderRadius?: boolean;
 }
+
+const useProfileImage = ({alt}: {alt: string}): {profileText: string} => {
+  const sentence = alt.trim();
+  if (!sentence.length) return {profileText: ''};
+  const words = sentence.split(' ');
+  const initials = words.map(word => word[0].toUpperCase()).join('');
+  return {profileText: initials.slice(0, 2)};
+};
 
 const CustomAvatar: React.FC<CustomAvatarProps> = ({
   name,
   imageUri,
-  size = 50,
+  size = 80,
   backgroundColor = 'gray',
   textColor = 'white',
+  borderRadius = false,
 }) => {
-  const initial = name.charAt(0).toUpperCase(); // Get first letter
+  const {profileText} = useProfileImage({alt: name});
 
   return (
-    <View style={[styles.container, { width: size, height: size, borderRadius: size / 2, backgroundColor }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          width: size,
+          height: size,
+          borderRadius: borderRadius ? size / 2 : 10,
+          backgroundColor,
+        },
+      ]}>
       {imageUri ? (
         <Image
-          source={{ uri: imageUri }}
-          style={[styles.image, { width: size, height: size, borderRadius: size / 2 }]}
+          source={{uri: imageUri}}
+          style={[
+            styles.image,
+            {
+              width: size,
+              height: size,
+              borderRadius: borderRadius ? size / 2 : 2,
+            },
+          ]}
           onError={() => console.warn('Failed to load image')}
         />
       ) : (
-        <Text style={[styles.initials, { fontSize: size / 2, color: textColor }]}>
-          {initial}
+        <Text style={[styles.initials, {fontSize: size / 3, color: textColor}]}>
+          {profileText}
         </Text>
       )}
     </View>

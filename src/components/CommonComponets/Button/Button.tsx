@@ -3,18 +3,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  Image,
   View,
-  GestureResponderEvent,
   StyleProp,
   TextStyle,
   ViewStyle,
-  ImageSourcePropType,
   Platform,
 } from 'react-native';
-import Fonts from '../../../utils/fonts';
 import Colors from '../../../utils/color';
-import {SF, SH, SW} from '../../../utils/dimensions';
+import {SF, SH} from '../../../utils/dimensions';
 interface ButtonProps {
   title: string;
   onPress: any;
@@ -22,13 +18,13 @@ interface ButtonProps {
   disable?: boolean;
   buttonTextStyle?: StyleProp<TextStyle>;
 }
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   title = '',
   onPress,
   buttonStyle = {},
   disable = false,
   buttonTextStyle = {},
-}) => {
+}: ButtonProps) => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
@@ -51,9 +47,7 @@ const Button: React.FC<ButtonProps> = ({
           elevation: Platform.OS === 'ios' ? 0 : 0,
         },
         buttonTextStyle: {
-          // color: Colors.secondaryBgTextColor,
           color: 'black',
-          // fontFamily: Fonts.Poppins_SemiBold,
           fontSize: SF(19),
           fontWeight: '600',
           lineHeight: SH(26),
