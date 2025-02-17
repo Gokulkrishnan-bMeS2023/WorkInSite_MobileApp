@@ -35,6 +35,7 @@ const useWorkerEdit = (id: string, navigation: any, route: any) => {
   const [gender, setGender] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [wageType, setWagetype] = useState('');
 
   const [contactList, setContactList] = useState<Contact[]>([]);
   const [contact, setContact] = useState<Contact>({
@@ -104,9 +105,9 @@ const useWorkerEdit = (id: string, navigation: any, route: any) => {
   useFocusEffect(
     useCallback(() => {
       fetchWorker(); // Fetch worker data again when the screen is focused
-    }, [id]) // Update dependencies if necessary
+    }, [id]), // Update dependencies if necessary
   );
-  
+
   const fetchContacts = async (searchString: string = '') => {
     if (searchString) {
       const contacts = await contactService.getContacts(searchString, false);
@@ -194,6 +195,7 @@ const useWorkerEdit = (id: string, navigation: any, route: any) => {
       workerCategoryId,
       contactId,
       gender,
+      wageType,
     });
   const {primaryContactDetails, hasMoreDetails} = useContactValidate(contact);
 

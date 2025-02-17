@@ -1,12 +1,14 @@
-import React, {useEffect} from 'react';
-import {View, StatusBar, StyleSheet} from 'react-native';
-import {Colors} from '../../utils';
+import React, { useEffect } from 'react';
+import { View, StatusBar, StyleSheet } from 'react-native';
+import { Colors } from '../../utils';
 import images from '../../images/index';
 import * as Animatable from 'react-native-animatable';
 import RouteName from '../../navigation/RouteName';
-import {AuthHelper} from '../../helpers/AuthHelper';
+import { AuthHelper } from '../../helpers/AuthHelper';
 import Styles from '../../styles/SplashScreenStyle'
-const SplashScreen = ({navigation}: any) => {
+import { useIsFocused } from '@react-navigation/native';
+const SplashScreen = ({ navigation }: any) => {
+  const isFocused = useIsFocused()
   StatusBar.setBackgroundColor(Colors.primaryColor);
   useEffect(() => {
     const checkUserProfile = async () => {
@@ -18,7 +20,7 @@ const SplashScreen = ({navigation}: any) => {
       }
     };
     setTimeout(checkUserProfile, 1500);
-  }, [navigation]);
+  }, [navigation, isFocused]);
   return (
     <View style={Styles.splashContainer}>
       <View style={Styles.splashLogoContainer}>

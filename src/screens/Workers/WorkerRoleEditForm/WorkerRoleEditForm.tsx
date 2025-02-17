@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Input } from '../../../components/CommonComponets';
 import Button from '../../../components/CommonComponets/Button/Button';
-import { useWorkerRoleInputValidate } from '../InputValidate/WorkerRoleValidate';
+import { useWorkerRoleEditForm } from './useWorkerRoleEditForm';
 
 interface WorkerRoleEditFormProps {
     workerRoleList: { workerRole: string; salaryPerShift: string; hoursPerShift: string }[];
@@ -11,43 +11,19 @@ interface WorkerRoleEditFormProps {
     refProp: any;
 }
 
-const WorkerRoleEditForm: React.FC<WorkerRoleEditFormProps> = ({
-    workerRoleList,
-    setworkerRoleList,
-    selectedItem,
-    refProp,
-}) => {
-    // States to hold form data
-    const [workerRole, setWorkerRole] = useState(selectedItem.value.workerRole);
-    const [salaryPerShift, setSalaryPerShift] = useState(selectedItem.value.salaryPerShift);
-    const [hoursPerShift, setHoursPerShift] = useState(selectedItem.value.hoursPerShift);
-    const { error, validate, setError, initialError } = useWorkerRoleInputValidate(
+const WorkerRoleEditForm = (props: WorkerRoleEditFormProps) => {
+
+    const {
         workerRole,
+        setWorkerRole,
         salaryPerShift,
+        setSalaryPerShift,
         hoursPerShift,
-    );
+        setHoursPerShift,
+        error,
+        handleSave,
+    } = useWorkerRoleEditForm(props)
 
-    // Effect to update form fields when selectedItem changes
-    useEffect(() => {
-        setWorkerRole(selectedItem.value.workerRole);
-        setSalaryPerShift(selectedItem.value.salaryPerShift);
-        setHoursPerShift(selectedItem.value.hoursPerShift);
-    }, [selectedItem]);
-
-    // Handle saving the edited worker role
-    const handleSave = () => {
-        if (validate()) {
-            const updatedList = [...workerRoleList];
-            updatedList[selectedItem.index] = {
-                workerRole,
-                salaryPerShift,
-                hoursPerShift,
-            };
-            setworkerRoleList(updatedList);
-            refProp.current.close();
-            setError(initialError);
-        }
-    };
 
     return (
         <View style={styles.container}>

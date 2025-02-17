@@ -177,11 +177,7 @@ const CustomDrawerContent = (props: any) => {
           label: 'Worker Category',
           screen: RouteName.WORKER_CATEGORY_LIST_SCREEN,
         },
-        { label: 'Work Rate Abstract', screen: RouteName.WORK_RATE_ABSTRACT },
-
-        // {label: 'Wage Type', screen: RouteName.WAGE_TYPE},
-        // {label: 'Work Type', screen: RouteName.WORK_TYPE},
-        // {label: 'Worker Role', screen: RouteName.WORKER_ROLE},
+        { label: 'Work Rate Abstract', screen: RouteName.WORK_RATE_ABSTRACT_LIST },
       ],
     },
     { label: 'Suppliers', icon: 'truck', screen: RouteName.SUPPLIER_LIST_SCREEN },

@@ -32,11 +32,10 @@ import ClientEditScreen from '../screens/Clients/ClientEditScreen/ClientEditScre
 import { UnitCreationScreen } from '../screens/Unit/UnitCreationScreen/UnitCreationScreen';
 import { MaterialCreationScreen } from '../screens/Materials/MaterialCreationScreen/MaterialCreationScreen';
 import MaterialListScreen from '../screens/Materials/MaterialListScreen/MaterialListScreen';
-import WageType from '../screens/Workers/WageType/WageType';
-import WorkType from '../screens/Workers/WorkType/WorkType';
-import WorkRole from '../screens/Workers/WorkRole/WorkRole';
-import WorkRateAbstract from '../screens/Workers/WorkRateAbstract/WorkRateAbstract';
+import WorkRateAbstract from '../screens/Workers/WorkRateAbstractCreate/WorkRateAbstractCreate';
 import WorkerCategoryListScreen from '../screens/Workers/WorkerCategoryListScreen/WorkerCategoryListScreen';
+import WorkRateAbstractListScreen from '../screens/Workers/WorkRateAbstractList/WorkRateAbstractList';
+import WorkRateAbstractEdit from '../screens/Workers/WorkRateAbstractEdit/WorkRateAbstractEdit';
 
 // import { PurchaseMaterialCreationScreen } from '../screens/PurchaseMaterial/PurchaseMaterialCreationScreen/PurchaseMaterialCreationScreen';
 // import { PurchaseCreationScreen } from '../screens/Purchase/PurchaseCreationScreen/PurchaseCreationScreen';
@@ -152,13 +151,17 @@ export default function DrawerNavigator() {
         name={RouteName.WORKER_CATEGORY_LIST_SCREEN}
         component={WorkerCategoryListScreen}
       />
-
-      <Drawer.Screen name={RouteName.WAGE_TYPE} component={WageType} />
-      <Drawer.Screen name={RouteName.WORK_TYPE} component={WorkType} />
-      <Drawer.Screen name={RouteName.WORKER_ROLE} component={WorkRole} />
       <Drawer.Screen
-        name={RouteName.WORK_RATE_ABSTRACT}
+        name={RouteName.WORK_RATE_ABSTRACT_CREATION}
         component={WorkRateAbstract}
+      />
+      <Drawer.Screen
+        name={RouteName.WORK_RATE_ABSTRACT_LIST}
+        component={WorkRateAbstractListScreen}
+      />
+      <Drawer.Screen
+        name={RouteName.WORK_RATE_ABSTRACT_EDIT}
+        component={WorkRateAbstractEdit}
       />
       <Drawer.Screen
         name={RouteName.SUPPLIER_LIST_SCREEN}

@@ -137,7 +137,7 @@ const WorkerCategoryEditPage = ({ navigation, route }: any) => {
   };
   return (
     <>
-      <Header title="Create Worker Category" onBackPress={handleBack} />
+      <Header title="Edit Worker Category" onBackPress={handleBack} />
       <ScrollView style={commonStyle.container} keyboardShouldPersistTaps="handled">
         <View style={commonStyle.inputfieldContainer}>
           <Input

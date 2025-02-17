@@ -4,6 +4,7 @@ import { Colors } from '../../../utils';
 import { Alert } from 'react-native';
 import { Input } from '../../../components/CommonComponets';
 import Button from '../../../components/CommonComponets/Button/Button';
+import { useWorkTypeEditForm } from './useWorkTypeEditForm';
 
 interface WorkTypeEditFormProps {
   workTypeList: string[];
@@ -12,34 +13,8 @@ interface WorkTypeEditFormProps {
   selectedItem?: { index: number; value: string };
 }
 
-const WorkTypeEditForm: React.FC<WorkTypeEditFormProps> = ({
-  workTypeList,
-  setworkTypeList,
-  refProp,
-  selectedItem,
-}) => {
-  const [newName, setNewName] = useState(selectedItem?.value || '');
-  const [error, setError] = useState("")
-
-
-  // Sync state when selectedItem changes
-  useEffect(() => {
-    setNewName(selectedItem?.value || '');
-  }, [selectedItem]);
-
-  const handleSave = () => {
-    if (!selectedItem) return;
-
-    if (newName.trim() === '') {
-      setError("Enter work type");
-      return;
-    }
-    const updatedList = [...workTypeList];
-    updatedList[selectedItem.index] = newName.trim();
-    setworkTypeList(updatedList);
-    refProp?.current?.close();
-    setError("");
-  };
+const WorkTypeEditForm = (props: WorkTypeEditFormProps) => {
+  const { newName, setNewName, error, handleSave } = useWorkTypeEditForm(props)
 
   return (
     <View style={styles.container}>
@@ -61,5 +36,4 @@ const styles = StyleSheet.create({
   container: {
     gap: 8
   },
-
 });

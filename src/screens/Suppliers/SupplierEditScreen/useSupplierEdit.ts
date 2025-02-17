@@ -70,12 +70,12 @@ const useSupplierEdit = (id: string, navigation: any, route: any) => {
   useEffect(() => {
     fetchSupplier();
   }, [id]);
+
   useFocusEffect(
-      useCallback(() => {
-        fetchSupplier(); // Fetch worker data again when the screen is focused
-      }, [id]) // Update dependencies if necessary
-    );
-    
+    useCallback(() => {
+      fetchSupplier(); // Fetch worker data again when the screen is focused
+    }, [id]), // Update dependencies if necessary
+  );
 
   const fetchContacts = async (searchString: string = '') => {
     if (searchString) {
