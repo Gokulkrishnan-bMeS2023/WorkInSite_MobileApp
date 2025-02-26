@@ -1,7 +1,7 @@
-import { useAPIHelper } from "../helpers/ApiHelper";
-import { ProfileUpdationRequest } from "../screens/Users/DTOs/ProfileUpdationRequest";
-import { UserCreationRequest } from "../screens/Users/DTOs/UserCreationRequest";
-import { UserUpdationRequest } from "../screens/Users/DTOs/UserUpdationRequest";
+import {useAPIHelper} from '../helpers/ApiHelper';
+import {ProfileUpdationRequest} from '../screens/Users/DTOs/ProfileUpdationRequest';
+import {UserCreationRequest} from '../screens/Users/DTOs/UserCreationRequest';
+import {UserUpdationRequest} from '../screens/Users/DTOs/UserUpdationRequest';
 import Config from 'react-native-config';
 
 const useUserService = () => {

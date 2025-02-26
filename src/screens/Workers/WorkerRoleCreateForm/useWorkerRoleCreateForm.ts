@@ -1,19 +1,14 @@
 import {useState} from 'react';
-import {Alert} from 'react-native';
 import {useWorkerRoleInputValidate} from '../InputValidate/WorkerRoleValidate';
+import {WorkerRoleProps} from '../DTOs/WorkerRoleProps';
 
-interface WorkerRoleProps {
-  workerRoleList: any;
-  setworkerRoleList: any;
-  Ref?: any;
-}
 export const useWorkerRoleCreateForm = (props: WorkerRoleProps) => {
-  const {workerRoleList, setworkerRoleList} = props;
-  const [workerRole, setWorkerRole] = useState('');
+  const {workerRoleList, setWorkerRoleList} = props;
+  const [name, setName] = useState('');
   const [salaryPerShift, setSalaryPerShift] = useState('');
   const [hoursPerShift, setHoursPerShift] = useState('');
   const {error, validate, setError, initialError} = useWorkerRoleInputValidate(
-    workerRole,
+    name,
     salaryPerShift,
     hoursPerShift,
   );
@@ -21,12 +16,12 @@ export const useWorkerRoleCreateForm = (props: WorkerRoleProps) => {
   const handleAdd = () => {
     if (validate()) {
       const newRole = {
-        workerRole,
+        name,
         salaryPerShift,
         hoursPerShift,
       };
-      setworkerRoleList([...workerRoleList, newRole]);
-      setWorkerRole('');
+      setWorkerRoleList([...workerRoleList, newRole]);
+      setName('');
       setSalaryPerShift('');
       setHoursPerShift('');
       props?.Ref?.current.close();
@@ -35,8 +30,8 @@ export const useWorkerRoleCreateForm = (props: WorkerRoleProps) => {
   };
 
   return {
-    workerRole,
-    setWorkerRole,
+    name,
+    setName,
     salaryPerShift,
     setSalaryPerShift,
     hoursPerShift,

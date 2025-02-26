@@ -1,3 +1,5 @@
+import {WorkRateAbstract} from '../DTOs/WorkRateAbstract';
+
 interface WorkerInputValidateProps {
   name: string;
   dateOfBirth: string;
@@ -7,4 +9,12 @@ interface WorkerInputValidateProps {
   wageType: string; // note
 }
 
-export type { WorkerInputValidateProps };
+interface WorkRateAbstractValidateProps {
+  siteId: string;
+  workTypeId: string;
+  totalRate: string;
+  totalQuantity: string;
+  unitId: string;
+}
+
+export type {WorkerInputValidateProps, WorkRateAbstractValidateProps};

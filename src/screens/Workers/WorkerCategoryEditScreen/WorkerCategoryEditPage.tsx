@@ -112,9 +112,9 @@ const WorkerCategoryEditPage = ({ navigation, route }: any) => {
     handleBack,
     handleSubmission,
     workTypeList,
-    setworkTypeList,
+    setWorkTypeList,
     workerRoleList,
-    setworkerRoleList,
+    setWorkerRoleList,
   } = useWorkerCategoryCreation({ navigation, route });
 
   // Handle hardware back button press
@@ -154,7 +154,6 @@ const WorkerCategoryEditPage = ({ navigation, route }: any) => {
             iconType="plus-circle"
             onClick={() => handleAdd("Type")}
             required={true}
-          // isIconDisabled={isAddDisabled}
           />
           <CustomBottomSheet
             ref={bottomSheetRef}
@@ -162,13 +161,13 @@ const WorkerCategoryEditPage = ({ navigation, route }: any) => {
             onClose={() => bottomSheetRef.current.close()}>
             <WorkTypeCreateForm
               workTypeList={workTypeList}
-              setworkTypeList={setworkTypeList}
+              setWorkTypeList={setWorkTypeList}
               Ref={bottomSheetRef}
             />
           </CustomBottomSheet>
           <WorkTypeList
             workTypeList={workTypeList}
-            setworkTypeList={setworkTypeList}
+            setWorkTypeList={setWorkTypeList}
           />
           <FormActionButton
             heading="Worker Role"
@@ -178,7 +177,7 @@ const WorkerCategoryEditPage = ({ navigation, route }: any) => {
           />
           <WorkerRoleList
             workerRoleList={workerRoleList}
-            setworkerRoleList={setworkerRoleList}
+            setWorkerRoleList={setWorkerRoleList}
           />
           <CustomBottomSheet
             ref={workerRolebottomSheetRef}
@@ -186,7 +185,7 @@ const WorkerCategoryEditPage = ({ navigation, route }: any) => {
             onClose={() => workerRolebottomSheetRef.current.close()}>
             <WorkerRoleCreateForm
               workerRoleList={workerRoleList}
-              setworkerRoleList={setworkerRoleList}
+              setWorkerRoleList={setWorkerRoleList}
               Ref={workerRolebottomSheetRef}
             />
           </CustomBottomSheet>

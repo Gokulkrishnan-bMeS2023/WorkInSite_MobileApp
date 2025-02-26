@@ -3,17 +3,12 @@ import React from 'react';
 import { Input } from '../../../components/CommonComponets';
 import { useWorkerRoleCreateForm } from './useWorkerRoleCreateForm';
 import Button from '../../../components/CommonComponets/Button/Button';
+import { WorkerRoleProps } from '../DTOs/WorkerRoleProps';
 
-interface WorkerRoleProps {
-    workerRoleList: any;
-    setworkerRoleList: any;
-    Ref?: any
-
-}
 const WorkerRoleCreateForm = (props: WorkerRoleProps) => {
     const {
-        workerRole,
-        setWorkerRole,
+        name,
+        setName,
         salaryPerShift,
         setSalaryPerShift,
         hoursPerShift,
@@ -27,10 +22,10 @@ const WorkerRoleCreateForm = (props: WorkerRoleProps) => {
             <Input
                 title="Worker Role"
                 placeholder="Enter Worker Role"
-                value={workerRole}
-                onChangeText={setWorkerRole}
+                value={name}
+                onChangeText={setName}
                 required
-                errorMessage={error.workerRole}
+                errorMessage={error.name}
             />
             <Input
                 title="Salary Per Shift"

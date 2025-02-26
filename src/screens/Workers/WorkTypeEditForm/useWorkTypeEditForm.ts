@@ -1,14 +1,7 @@
 import {useEffect, useState} from 'react';
-
-interface WorkTypeEditFormProps {
-  workTypeList: string[];
-  setworkTypeList: (newList: string[]) => void;
-  refProp?: React.RefObject<any>;
-  selectedItem?: {index: number; value: string};
-}
-
+import {WorkTypeEditFormProps} from '../DTOs/WorkTypeProps';
 export const useWorkTypeEditForm = (props: WorkTypeEditFormProps) => {
-  const {workTypeList, setworkTypeList, selectedItem, refProp} = props;
+  const {workTypeList, setWorkTypeList, selectedItem, Ref} = props;
   const [newName, setNewName] = useState(selectedItem?.value || '');
   const [error, setError] = useState('');
 
@@ -25,8 +18,8 @@ export const useWorkTypeEditForm = (props: WorkTypeEditFormProps) => {
     }
     const updatedList = [...workTypeList];
     updatedList[selectedItem.index] = newName.trim();
-    setworkTypeList(updatedList);
-    refProp?.current?.close();
+    setWorkTypeList(updatedList);
+    Ref?.current?.close();
     setError('');
   };
 

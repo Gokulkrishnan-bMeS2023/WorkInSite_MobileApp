@@ -634,6 +634,144 @@
 
 //5
 
+// import {useEffect, useState} from 'react';
+// import {Alert} from 'react-native';
+// import {useWorkerCategoryService} from '../../../services/WorkerCategoryService';
+// import {useWorkerCategoryInputValidate} from '../InputValidate/WorkerCategoryInputValidate';
+// import RouteName from '../../../navigation/RouteName';
+// import {useIsFocused} from '@react-navigation/native';
+
+// import axios from 'axios';
+
+// export const useWorkerCategoryCreation = ({navigation, route}: any) => {
+//   const redirectUrl = route?.params?.redirect;
+//   const workerCategoryService = useWorkerCategoryService();
+//   const [workerCategoryName, setWorkerCategoryName] = useState(
+//     route?.params?.workerCategoryName || '',
+//   );
+//   const [notes, setNotes] = useState(route?.params?.notes || '');
+//   const [workTypeList, setworkTypeList] = useState<string[]>([]);
+//   const [workerRoleList, setworkerRoleList] = useState<
+//     {workerRole: string; salaryPerShift: string; hoursPerShift: string}[]
+//   >([]);
+
+//   const {error, validate, setError, initialError} =
+//     useWorkerCategoryInputValidate(workerCategoryName);
+//   const isFocused = useIsFocused();
+
+//   // Create Worker Category
+//   const createWorkerCategory = async (workerCategory: any) => {
+//     try {
+//       const response = await axios.post(
+//         // 'https://workinsite-test-api.onrender.com/dsc',
+//         'https://workinsite-test-api.onrender.com/workerCategory',
+//         workerCategory,
+//         {
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//         },
+//       );
+
+//       return response.data;
+//     } catch (error: any) {
+//       if (axios.isAxiosError(error)) {
+//         console.error('Error response:', error.response?.data);
+//         console.error('Status code:', error.response?.status);
+//         console.error('Headers:', error.response?.headers);
+//       } else {
+//         console.error('Unexpected error:', error);
+//       }
+//       return null;
+//     }
+//   };
+
+//   // Handle form submission
+//   const handleSubmission = async () => {
+//     if (validate()) {
+//       const workerCategory = {
+//         workerCategoryName,
+//         workerRole: workerRoleList,
+//         workType: workTypeList,
+//         note: notes,
+//       };
+//       console.log('workerCategory', workerCategory);
+
+//       // const response = await workerCategoryService.createWorkerCategory(
+//       //   workerCategory,
+//       // );
+//       const response = await createWorkerCategory(workerCategory);
+
+//       navigation.navigate(redirectUrl || RouteName.Home_SCREEN, {
+//         workerCategoryId: response?.id || '',
+//         id: route?.params?.id || '',
+//       });
+//     }
+//   };
+
+//   // Reset states on blur
+//   useEffect(() => {
+//     if (!isFocused) {
+//       setWorkerCategoryName('');
+//       setNotes('');
+//       setError(initialError);
+//       setworkTypeList([]);
+//       setworkerRoleList([]);
+//     }
+//   }, [isFocused]);
+
+//   const hasUnsavedChanges =
+//     workerCategoryName.trim() !== '' ||
+//     notes.trim() !== '' ||
+//     workTypeList.length !== 0;
+
+//   const handleNavigation = (redirect: string | undefined) => {
+//     navigation.navigate(redirect || RouteName.WORKER_CATEGORY_LIST_SCREEN, {
+//       id: route?.params?.id || '',
+//     });
+//   };
+
+//   const showUnsavedChangesAlert = () => {
+//     Alert.alert(
+//       'Unsaved Changes',
+//       'You have unsaved changes. Do you want to save before exiting?',
+//       [
+//         {text: 'Save', onPress: handleSubmission},
+//         {
+//           text: 'Exit Without Saving',
+//           onPress: () => handleNavigation(redirectUrl),
+//         },
+//         {text: 'Cancel', style: 'cancel'},
+//       ],
+//       {cancelable: true},
+//     );
+//   };
+
+//   // Handle back navigation with unsaved changes
+//   const handleBack = () => {
+//     hasUnsavedChanges
+//       ? showUnsavedChangesAlert()
+//       : handleNavigation(redirectUrl);
+//     return true;
+//   };
+
+//   return {
+//     workerCategoryName,
+//     setWorkerCategoryName,
+//     notes,
+//     setNotes,
+//     error,
+//     handleBack,
+//     handleSubmission,
+//     workTypeList,
+//     setworkTypeList,
+//     workerRoleList,
+//     setworkerRoleList,
+//   };
+// };
+
+//2
+
 import {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import {useWorkerCategoryService} from '../../../services/WorkerCategoryService';
@@ -641,52 +779,21 @@ import {useWorkerCategoryInputValidate} from '../InputValidate/WorkerCategoryInp
 import RouteName from '../../../navigation/RouteName';
 import {useIsFocused} from '@react-navigation/native';
 
-import axios from 'axios';
-
 export const useWorkerCategoryCreation = ({navigation, route}: any) => {
-  const redirectUrl = route?.params?.redirect;
+  const redirect = route?.params?.redirect;
+
   const workerCategoryService = useWorkerCategoryService();
   const [workerCategoryName, setWorkerCategoryName] = useState(
     route?.params?.workerCategoryName || '',
   );
-  const [notes, setNotes] = useState(route?.params?.notes || '');
-  const [workTypeList, setworkTypeList] = useState<string[]>([]);
-  const [workerRoleList, setworkerRoleList] = useState<
-    {workerRole: string; salaryPerShift: string; hoursPerShift: string}[]
-  >([]);
+  const [notes, setNotes] = useState('');
+  const [workTypeList, setWorkTypeList] = useState<any>([]);
+  const [workerRoleList, setWorkerRoleList] = useState<any>([]);
 
   const {error, validate, setError, initialError} =
     useWorkerCategoryInputValidate(workerCategoryName);
   const isFocused = useIsFocused();
 
-  // Create Worker Category
-  const createWorkerCategory = async (workerCategory: any) => {
-    try {
-      const response = await axios.post(
-        // 'https://workinsite-test-api.onrender.com/dsc',
-        'https://workinsite-test-api.onrender.com/workerCategory',
-        workerCategory,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      return response.data;
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        console.error('Error response:', error.response?.data);
-        console.error('Status code:', error.response?.status);
-        console.error('Headers:', error.response?.headers);
-      } else {
-        console.error('Unexpected error:', error);
-      }
-      return null;
-    }
-  };
-
-  // Handle form submission
   const handleSubmission = async () => {
     if (validate()) {
       const workerCategory = {
@@ -695,40 +802,44 @@ export const useWorkerCategoryCreation = ({navigation, route}: any) => {
         workType: workTypeList,
         note: notes,
       };
-      console.log('workerCategory', workerCategory);
-
-      // const response = await workerCategoryService.createWorkerCategory(
-      //   workerCategory,
-      // );
-      const response = await createWorkerCategory(workerCategory);
-
-      navigation.navigate(redirectUrl || RouteName.Home_SCREEN, {
-        workerCategoryId: response?.id || '',
-        id: route?.params?.id || '',
-      });
+      const response = await workerCategoryService.createWorkerCategory(
+        workerCategory,
+      );
+      if (redirect) {
+        navigation.navigate(redirect, {
+          workerCategoryId: response?.id || '',
+          id: route?.params?.id || '',
+        });
+      } else {
+        navigation.navigate(RouteName.Home_SCREEN);
+      }
     }
   };
 
-  // Reset states on blur
   useEffect(() => {
     if (!isFocused) {
       setWorkerCategoryName('');
       setNotes('');
       setError(initialError);
-      setworkTypeList([]);
-      setworkerRoleList([]);
+      setWorkTypeList([]);
+      setWorkerRoleList([]);
     }
   }, [isFocused]);
 
   const hasUnsavedChanges =
     workerCategoryName.trim() !== '' ||
     notes.trim() !== '' ||
-    workTypeList.length !== 0;
+    workTypeList.length !== 0 ||
+    workerRoleList.length !== 0;
 
-  const handleNavigation = (redirect: string | undefined) => {
-    navigation.navigate(redirect || RouteName.WORKER_CATEGORY_LIST_SCREEN, {
-      id: route?.params?.id || '',
-    });
+  const handleNavigation = () => {
+    if (redirect) {
+      navigation.navigate(redirect, {
+        id: route?.params?.id || '',
+      });
+    } else {
+      navigation.navigate(RouteName.WORKER_CATEGORY_LIST_SCREEN);
+    }
   };
 
   const showUnsavedChangesAlert = () => {
@@ -739,7 +850,7 @@ export const useWorkerCategoryCreation = ({navigation, route}: any) => {
         {text: 'Save', onPress: handleSubmission},
         {
           text: 'Exit Without Saving',
-          onPress: () => handleNavigation(redirectUrl),
+          onPress: () => handleNavigation(),
         },
         {text: 'Cancel', style: 'cancel'},
       ],
@@ -749,9 +860,7 @@ export const useWorkerCategoryCreation = ({navigation, route}: any) => {
 
   // Handle back navigation with unsaved changes
   const handleBack = () => {
-    hasUnsavedChanges
-      ? showUnsavedChangesAlert()
-      : handleNavigation(redirectUrl);
+    hasUnsavedChanges ? showUnsavedChangesAlert() : handleNavigation();
     return true;
   };
 
@@ -764,8 +873,8 @@ export const useWorkerCategoryCreation = ({navigation, route}: any) => {
     handleBack,
     handleSubmission,
     workTypeList,
-    setworkTypeList,
+    setWorkTypeList,
     workerRoleList,
-    setworkerRoleList,
+    setWorkerRoleList,
   };
 };

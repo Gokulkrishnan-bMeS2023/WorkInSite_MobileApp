@@ -41,5 +41,10 @@ const RouteName = {
   PURCHASE_LIST_SCREEN: 'PurchaseListScreen',
   PURCHASE_EDIT_SCREEN: 'PurchaseEditScreen',
   PURCHASEMATERIAL_CREATION_SCREEN: 'PurchaseMaterialCreationScreen',
+  WORK_MODE_CREATION_SCREEN: 'WorkModeCreationScreen',
+  SHIFT_CREATION_SCREEN: 'ShiftCreationScreen',
+  ATTENDANCE_LIST_SCREEN: 'AttendanceListScreen',
+  ATTENDANCE_CREATION_SCREEN: 'AttendanceCreationScreen',
+  ATTENDANCE_EDIT_SCREEN: 'AttendanceEditScreen',
 };
 export default RouteName;

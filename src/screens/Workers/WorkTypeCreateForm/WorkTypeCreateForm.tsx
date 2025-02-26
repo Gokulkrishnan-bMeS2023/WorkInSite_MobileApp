@@ -3,12 +3,7 @@ import React from 'react'
 import { Input } from '../../../components/CommonComponets'
 import { useWorkType } from './useWorkTypeCreateForm';
 import Button from '../../../components/CommonComponets/Button/Button';
-
-interface WorkTypeProps {
-    workTypeList: string[];
-    setworkTypeList: any;
-    Ref: any;
-}
+import { WorkTypeProps } from '../DTOs/WorkTypeProps';
 
 const WorkTypeCreateForm = (props: WorkTypeProps) => {
     const {

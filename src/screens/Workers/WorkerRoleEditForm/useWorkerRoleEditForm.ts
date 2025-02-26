@@ -1,28 +1,10 @@
 import {useEffect, useState} from 'react';
 import {useWorkerRoleInputValidate} from '../InputValidate/WorkerRoleValidate';
+import {WorkerRoleEditFormProps} from '../DTOs/WorkerRoleProps';
 
-interface WorkerRoleEditFormProps {
-  workerRoleList: {
-    workerRole: string;
-    salaryPerShift: string;
-    hoursPerShift: string;
-  }[];
-  setworkerRoleList: (
-    newList: {
-      workerRole: string;
-      salaryPerShift: string;
-      hoursPerShift: string;
-    }[],
-  ) => void;
-  selectedItem: {
-    index: number;
-    value: {workerRole: string; salaryPerShift: string; hoursPerShift: string};
-  };
-  refProp: any;
-}
 export const useWorkerRoleEditForm = (props: WorkerRoleEditFormProps) => {
-  const {workerRoleList, setworkerRoleList, selectedItem, refProp} = props;
-  const [workerRole, setWorkerRole] = useState(selectedItem.value.workerRole);
+  const {workerRoleList, setWorkerRoleList, selectedItem, refProp} = props;
+  const [name, setName] = useState(selectedItem.value.name);
   const [salaryPerShift, setSalaryPerShift] = useState(
     selectedItem.value.salaryPerShift,
   );
@@ -30,14 +12,14 @@ export const useWorkerRoleEditForm = (props: WorkerRoleEditFormProps) => {
     selectedItem.value.hoursPerShift,
   );
   const {error, validate, setError, initialError} = useWorkerRoleInputValidate(
-    workerRole,
+    name,
     salaryPerShift,
     hoursPerShift,
   );
 
   // Effect to update form fields when selectedItem changes
   useEffect(() => {
-    setWorkerRole(selectedItem.value.workerRole);
+    setName(selectedItem.value.name);
     setSalaryPerShift(selectedItem.value.salaryPerShift);
     setHoursPerShift(selectedItem.value.hoursPerShift);
   }, [selectedItem]);
@@ -47,18 +29,18 @@ export const useWorkerRoleEditForm = (props: WorkerRoleEditFormProps) => {
     if (validate()) {
       const updatedList = [...workerRoleList];
       updatedList[selectedItem.index] = {
-        workerRole,
+        name,
         salaryPerShift,
         hoursPerShift,
       };
-      setworkerRoleList(updatedList);
+      setWorkerRoleList(updatedList);
       refProp.current.close();
       setError(initialError);
     }
   };
   return {
-    workerRole,
-    setWorkerRole,
+    name,
+    setName,
     salaryPerShift,
     setSalaryPerShift,
     hoursPerShift,

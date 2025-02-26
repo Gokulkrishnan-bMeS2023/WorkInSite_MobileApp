@@ -2,12 +2,12 @@
 import {useState} from 'react';
 
 const useWorkerRoleInputValidate = (
-  workerRole: string,
+  name: string,
   salaryPerShift: string,
   hoursPerShift: string,
 ) => {
   const initialError = {
-    workerRole: '',
+    name: '',
     salaryPerShift: '',
     hoursPerShift: '',
   };
@@ -25,9 +25,9 @@ const useWorkerRoleInputValidate = (
       isValid = false;
     };
 
-    if (!workerRole) updateError('workerRole', 'Please enter worker role');
-    if (workerRole && workerRole.length < 2)
-      updateError('workerRole', 'Worker role must be at least 2 characters');
+    if (!name) updateError('name', 'Please enter worker role');
+    if (name && name.length < 2)
+      updateError('name', 'Worker role must be at least 2 characters');
 
     if (!salaryPerShift)
       updateError('salaryPerShift', 'Please enter salary per shift');

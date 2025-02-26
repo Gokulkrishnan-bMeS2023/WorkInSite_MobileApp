@@ -51,6 +51,8 @@ const useWorkerEdit = (id: string, navigation: any, route: any) => {
     workerCategoryName: '',
     note: '',
     isActive: true,
+    // workerRole: [],
+    // workType: [],
   });
 
   const initialData = {

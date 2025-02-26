@@ -1,12 +1,11 @@
 import {useState} from 'react';
+import {WorkRateAbstractValidateProps} from './DTOs';
 
 const useWorkRateAbstractValidate = (
-  siteId: string,
-  workTypeId: string,
-  totalRate: string,
-  totalQuantity: string,
-  unitId: string,
+  workRateAbstract: WorkRateAbstractValidateProps,
 ) => {
+  const {siteId, workTypeId, totalRate, totalQuantity, unitId} =
+    workRateAbstract;
   const initialError = {
     site: '',
     workType: '',

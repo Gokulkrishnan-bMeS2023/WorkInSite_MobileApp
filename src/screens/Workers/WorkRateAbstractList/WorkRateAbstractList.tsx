@@ -99,7 +99,7 @@ export default function WorkRateAbstractListScreen({ navigation }: any) {
                                 <ContactCard
                                     key={workRateAbstract.id}
                                     name={workRateAbstract.siteName}
-                                    phone={workRateAbstract.workTypeName}
+                                    text={workRateAbstract.workTypeName}
                                     onDelete={() => confirmDelete(workRateAbstract.id)}
                                 />
 

@@ -3,19 +3,12 @@ import { View, StyleSheet } from 'react-native';
 import { Input } from '../../../components/CommonComponets';
 import Button from '../../../components/CommonComponets/Button/Button';
 import { useWorkerRoleEditForm } from './useWorkerRoleEditForm';
-
-interface WorkerRoleEditFormProps {
-    workerRoleList: { workerRole: string; salaryPerShift: string; hoursPerShift: string }[];
-    setworkerRoleList: (newList: { workerRole: string; salaryPerShift: string; hoursPerShift: string }[]) => void;
-    selectedItem: { index: number; value: { workerRole: string; salaryPerShift: string; hoursPerShift: string } };
-    refProp: any;
-}
+import { WorkerRoleEditFormProps } from '../DTOs/WorkerRoleProps';
 
 const WorkerRoleEditForm = (props: WorkerRoleEditFormProps) => {
-
     const {
-        workerRole,
-        setWorkerRole,
+        name,
+        setName,
         salaryPerShift,
         setSalaryPerShift,
         hoursPerShift,
@@ -24,15 +17,14 @@ const WorkerRoleEditForm = (props: WorkerRoleEditFormProps) => {
         handleSave,
     } = useWorkerRoleEditForm(props)
 
-
     return (
         <View style={styles.container}>
             <Input
                 title='Worker Role'
-                value={workerRole}
-                onChangeText={setWorkerRole}
+                value={name}
+                onChangeText={setName}
                 placeholder=' Enter worker role'
-                errorMessage={error.workerRole}
+                errorMessage={error.name}
             />
             <Input
                 title='Salary Per Shift'

@@ -1,25 +1,22 @@
 import {Alert} from 'react-native';
-
-interface WorkerRoleProps {
-  workerRoleList: {
-    workerRole: string;
-    salaryPerShift: string;
-    hoursPerShift: string;
-  }[];
-  setworkerRoleList: (
-    newList: {
-      workerRole: string;
-      salaryPerShift: string;
-      hoursPerShift: string;
-    }[],
-  ) => void;
-}
+import {WorkerRole, WorkerRoleProps} from '../DTOs/WorkerRoleProps';
+import {useRef, useState} from 'react';
 
 export const useWorkerRoleList = ({
   workerRoleList,
-  setworkerRoleList,
+  setWorkerRoleList,
 }: WorkerRoleProps) => {
-  // Handle deleting a worker role
+  const workerRoleBottomSheetRef = useRef<any>(null);
+  const [selectedItem, setSelectedItem] = useState<{
+    index: number;
+    value: WorkerRole;
+  } | null>(null);
+
+  const handleEdit = (index: number, value: WorkerRole) => {
+    setSelectedItem({index, value});
+    workerRoleBottomSheetRef.current?.open();
+  };
+
   const handleDelete = (index: number) => {
     Alert.alert(
       'Confirm Delete',
@@ -29,7 +26,7 @@ export const useWorkerRoleList = ({
         {
           text: 'Delete',
           onPress: () => {
-            setworkerRoleList(workerRoleList.filter((_, i) => i !== index)); // Remove the worker role at the given index
+            setWorkerRoleList(workerRoleList.filter((_, i) => i !== index));
             console.log('Worker Role deleted');
           },
           style: 'destructive',
@@ -38,7 +35,5 @@ export const useWorkerRoleList = ({
     );
   };
 
-  // Optionally, add more actions (e.g., for adding or updating roles) if needed
-
-  return {handleDelete};
+  return {workerRoleBottomSheetRef, selectedItem, handleDelete, handleEdit};
 };

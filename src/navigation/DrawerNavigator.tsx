@@ -36,6 +36,9 @@ import WorkRateAbstract from '../screens/Workers/WorkRateAbstractCreate/WorkRate
 import WorkerCategoryListScreen from '../screens/Workers/WorkerCategoryListScreen/WorkerCategoryListScreen';
 import WorkRateAbstractListScreen from '../screens/Workers/WorkRateAbstractList/WorkRateAbstractList';
 import WorkRateAbstractEdit from '../screens/Workers/WorkRateAbstractEdit/WorkRateAbstractEdit';
+import { WorkModeCreationScreen } from '../screens/Attendance/WorkMode/WorkModeCreationScreen/WorkModeCreationScreen';
+import { ShiftCreationScreen } from '../screens/Attendance/Shift/ShiftCreationScreen/ShiftCreationScreen';
+import AttendanceCreationScreen from '../screens/Attendance/AttendanceCreationScreen/AttendanceCreationScreen';
 
 // import { PurchaseMaterialCreationScreen } from '../screens/PurchaseMaterial/PurchaseMaterialCreationScreen/PurchaseMaterialCreationScreen';
 // import { PurchaseCreationScreen } from '../screens/Purchase/PurchaseCreationScreen/PurchaseCreationScreen';
@@ -191,6 +194,16 @@ export default function DrawerNavigator() {
         name={RouteName.UNIT_CREATION_SCREEN}
         component={UnitCreationScreen}
       />
+      <Drawer.Screen
+        name={RouteName.WORK_MODE_CREATION_SCREEN}
+        component={WorkModeCreationScreen}
+      />
+      <Drawer.Screen
+        name={RouteName.SHIFT_CREATION_SCREEN}
+        component={ShiftCreationScreen}
+      />
+      <Drawer.Screen name={RouteName.ATTENDANCE_CREATION_SCREEN}
+        component={AttendanceCreationScreen} />
       {/* <Drawer.Screen
         name={RouteName.PURCHASE_CREATION_SCREEN}
         component={PurchaseCreationScreen}

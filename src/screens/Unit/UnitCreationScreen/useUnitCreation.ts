@@ -1,53 +1,73 @@
-import { useState } from 'react';
-import { Alert } from 'react-native';
+import {useState, useEffect} from 'react';
+import {useUnitService} from '../../../services/UnitService';
+import {Alert} from 'react-native';
 import RouteName from '../../../navigation/RouteName';
+import {useIsFocused, useRoute} from '@react-navigation/native';
+import {useUnitInputValidate} from '../useUnitInputValidate';
 
+export const useUnitCreation = ({navigation}: any) => {
+  const route = useRoute<any>();
+  const unitService = useUnitService();
+  const isFocused = useIsFocused();
 
-const useUnitCreation = ({ navigation }: any) => {
- 
   const [name, setName] = useState('');
-  const [error, setError] = useState<{ name: string }>({ name: '' });
 
-  const validate = () => {
-    if (!name.trim()) {
-      setError({ name: 'Unit is required' });
-      return false;
+  useEffect(() => {
+    if (route.params?.name && isFocused) {
+      setName(route.params.name);
     }
-    setError({ name: '' });
+  }, [route.params?.name, isFocused]);
+
+  // Corrected here, passing unitName instead of name
+  const {error, validate, setError, initialError} = useUnitInputValidate({
+    name,
+  });
+
+  const resetFormFields = () => {
+    setName('');
+    setError(initialError);
+  };
+
+  const hasUnsavedChanges = () => name.trim() !== '';
+
+  const handleBackPress = () => {
+    if (hasUnsavedChanges()) {
+      Alert.alert(
+        'Unsaved Changes',
+        'You have unsaved changes. Do you want to save them?',
+        [
+          {text: 'Cancel', style: 'cancel'},
+          {text: 'Save', onPress: handleSubmission},
+          {
+            text: 'Exit Without Save',
+            onPress: () => {
+              resetFormFields();
+              navigation.navigate(RouteName.Home_SCREEN); // You may want to navigate here
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      resetFormFields();
+      navigation.navigate(RouteName.Home_SCREEN); // You may want to navigate here
+    }
     return true;
   };
 
   const handleSubmission = async () => {
     if (validate()) {
-      try {
-        // await unitService.createUnit({ name });
-        Alert.alert('Success', 'Unit created successfully', [
-          { text: 'OK', onPress: () => navigation.goBack() },
-        ]);
-      } catch (err) {
-        Alert.alert('Error', 'Failed to create unit');
+      const unit = {
+        name,
+      };
+      const response = await unitService.createUnit(unit);
+      resetFormFields();
+      if (route.params?.redirect) {
+        navigation.navigate(route.params.redirect, {unitId: response.id});
+        return;
       }
     }
   };
 
-  const handleBackPress = () => {
-    if (name.trim()) {
-      Alert.alert(
-        'Unsaved Changes',
-        'You have unsaved changes. Do you want to save them?',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Save', onPress: handleSubmission },
-          { text: 'Discard', onPress: () => navigation.navigate(RouteName.Home_SCREEN) },
-        ],
-      );
-    } else {
-    navigation.navigate(RouteName.Home_SCREEN) ;
-    }
-    return true;
-  };
-
-  return { name, setName, handleSubmission, handleBackPress, error };
+  return {name, setName, error, handleSubmission, handleBackPress};
 };
-
-export { useUnitCreation };

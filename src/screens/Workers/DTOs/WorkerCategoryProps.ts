@@ -1,5 +1,10 @@
+import {WorkerRole} from './WorkerRoleProps';
+import {WorkType} from './WorkTypeProps';
+
 interface WorkerCategoryCreationRequest {
   workerCategoryName: string;
+  // workType: WorkType[];
+  // workerRole: WorkerRole[];
   note: string;
 }
 

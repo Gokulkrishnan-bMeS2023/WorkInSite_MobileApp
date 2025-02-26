@@ -1,27 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState, useRef } from 'react';
 import Icon from '../../../utils/VectorIcons';
 import { Colors } from '../../../utils';
 import { useWorkTypeList } from './useWorkTypeList';
 import CustomBottomSheet from '../../../components/CommonComponets/CustomBottomSheet/CustomBottomSheet';
 import WorkTypeEditForm from '../WorkTypeEditForm/WorkTypeEditForm';
+import { WorkTypeProps } from '../DTOs/WorkTypeProps';
 
-interface WorkTypeProps {
-    workTypeList: string[];
-    setworkTypeList: (newList: string[]) => void;
-}
 
-const WorkTypeList: React.FC<WorkTypeProps> = ({ workTypeList, setworkTypeList }) => {
-    const { handleDelete } = useWorkTypeList({ workTypeList, setworkTypeList });
-    const bottomSheetRef = useRef<any>(null);
-
-    const [selectedItem, setSelectedItem] = useState<{ index: number; value: string } | null>(null);
-
-    const handleEdit = (index: number, value: string) => {
-        setSelectedItem({ index, value });
-        bottomSheetRef.current?.open();
-    };
-
+const WorkTypeList = ({ workTypeList, setWorkTypeList }: WorkTypeProps) => {
+    const { handleDelete, handleEdit, selectedItem, bottomSheetRef } = useWorkTypeList({ workTypeList, setWorkTypeList });
     return (
         <View>
             {workTypeList.map((item, index) => (
@@ -43,8 +30,8 @@ const WorkTypeList: React.FC<WorkTypeProps> = ({ workTypeList, setworkTypeList }
                 {selectedItem && (
                     <WorkTypeEditForm
                         workTypeList={workTypeList}
-                        setworkTypeList={setworkTypeList}
-                        refProp={bottomSheetRef}
+                        setWorkTypeList={setWorkTypeList}
+                        Ref={bottomSheetRef}
                         selectedItem={selectedItem}
                     />
                 )}

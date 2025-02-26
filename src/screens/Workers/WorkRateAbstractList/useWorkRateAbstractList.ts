@@ -3,19 +3,18 @@ import {useIsFocused} from '@react-navigation/native';
 import RouteName from '../../../navigation/RouteName';
 import {Alert} from 'react-native';
 import axios from 'axios';
+import {useWorkRateAbstractService} from '../../../services/WorkRateAbstractService';
 
 const useWorkRateAbstractionList = ({navigation}: any) => {
-  // const workRateAbstractService = useworkRateAbstractService();
+  const workRateAbstractService = useWorkRateAbstractService();
   const [workRateAbstract, setWorkRateAbstract] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const IsFocused = useIsFocused();
 
-  const fetchWorkRateAbstract = async () => {
-    // const workRateAbstractData = await workRateAbstractService.getworkRateAbstracts(searchString);
-    const workRateAbstractData = await axios.get(
-      'https://workinsite-test-api.onrender.com/workerRateAbstract',
-    );
-    setWorkRateAbstract(workRateAbstractData.data);
+  const fetchWorkRateAbstract = async (searchString: string = '') => {
+    const workRateAbstractData =
+      await workRateAbstractService.getWorkRateAbstracts(searchString);
+    setWorkRateAbstract(workRateAbstractData);
 
     if (workRateAbstractData) {
       setLoading(false);
@@ -47,21 +46,14 @@ const useWorkRateAbstractionList = ({navigation}: any) => {
     );
   };
 
-  const redirectUrl = RouteName.WORK_RATE_ABSTRACT_LIST;
   const handleEditworkRateAbstract = (id: number) => {
-    // navigation.navigate(RouteName.workRateAbstract_EDIT_SCREEN, {id: id});
-    const redirect = redirectUrl;
     navigation.navigate(RouteName.WORK_RATE_ABSTRACT_EDIT, {
       workRateAbstractId: id,
-      redirect,
     });
   };
 
   const handleworkRateAbstractDelete = async (id: number) => {
-    // await workRateAbstractService.deleteworkRateAbstract(id);
-    await axios.delete(
-      `https://workinsite-test-api.onrender.com/workerRateAbstract/${id}`,
-    );
+    await workRateAbstractService.deleteWorkRateAbstract(id);
     fetchWorkRateAbstract();
   };
 

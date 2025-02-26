@@ -1,21 +1,15 @@
 import {useState} from 'react';
-
-interface WorkTypeProps {
-  workTypeList: string[];
-  setworkTypeList: any;
-  Ref: any;
-}
-
+import {WorkTypeProps} from '../DTOs/WorkTypeProps';
 export const useWorkType = (props: WorkTypeProps) => {
-  const {workTypeList, setworkTypeList} = props;
+  const {workTypeList, setWorkTypeList, Ref} = props;
   const [workType, setWorkType] = useState('');
   const [error, setError] = useState('');
 
   const handleAdd = () => {
     if (workType) {
-      setworkTypeList([...workTypeList, workType]);
+      setWorkTypeList([...workTypeList, workType]);
       setWorkType('');
-      props?.Ref?.current.close();
+      Ref?.current.close();
       setError('');
     } else {
       setError('Enter work type');
@@ -27,7 +21,7 @@ export const useWorkType = (props: WorkTypeProps) => {
     setWorkType,
     handleAdd,
     workTypeList,
-    setworkTypeList,
+    setWorkTypeList,
     error,
   };
 };

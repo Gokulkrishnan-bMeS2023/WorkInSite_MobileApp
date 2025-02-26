@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Linking} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CustomAvatar from '../../../screens/ProfileScreen/CustomAvatar';
-import {Colors} from '../../../utils';
+import { Colors } from '../../../utils';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 interface ContactCardProps {
@@ -10,6 +10,7 @@ interface ContactCardProps {
   imgURL?: string;
   phone?: string;
   email?: string;
+  text?: string;
   onDelete: () => void;
 }
 
@@ -18,6 +19,7 @@ const ContactCard = ({
   imgURL,
   phone,
   email,
+  text,
   onDelete,
 }: ContactCardProps) => {
   const handlePhonePress = () => {
@@ -65,6 +67,9 @@ const ContactCard = ({
             </TouchableOpacity>
           </View>
         )}
+        {text && (
+          <Text style={styles.text}>{text}</Text>
+        )}
       </View>
       <TouchableOpacity onPress={onDelete} style={styles.deleteIcon}>
         <Icon name="delete" size={20} color={Colors.dangerColor} />
@@ -107,6 +112,11 @@ const styles = StyleSheet.create({
   deleteIcon: {
     marginLeft: 12,
   },
+  text: {
+    fontSize: 16,
+    marginTop: 2,
+    color: Colors.grayColor,
+  }
 });
 
 export default ContactCard;

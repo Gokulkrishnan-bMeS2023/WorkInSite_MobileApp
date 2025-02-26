@@ -194,6 +194,15 @@ const CustomDrawerContent = (props: any) => {
         },
       ],
     },
+    {
+      label: 'Attendance',
+      icon: 'truck',
+      submenus: [
+        { label: 'Work mode', screen: RouteName.WORK_MODE_CREATION_SCREEN },
+        { label: 'Shift', screen: RouteName.SHIFT_CREATION_SCREEN },
+        { label: 'Attendance', screen: RouteName.ATTENDANCE_CREATION_SCREEN },
+      ],
+    },
   ];
 
   const [drawerItems, setDrawerItems] = useState(initialRouteName);
